@@ -4,8 +4,16 @@ const form = document.querySelector('.feedback-form');
 const { email, message } = form.elements;
 
 form.addEventListener('input', () => {
+  localStorage.setItem(FORM_KEY, JSON.stringify({ email: email.value, message: message.value }));
+});
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
   console.log({ email: email.value, message: message.value });
-  localStorage.setItem(FORM_KEY, JSON.stringify(objForm));
+  if (email.value === '' || message.value === '') {
+    return alert('Будь-ласка, заповніть всі поля!');
+  }
+  e.currentTarget.reset();
 });
 
 loadPage()
@@ -14,17 +22,6 @@ function loadPage() {
   if (objForm) {
     email.value = objForm.email || '';
     message.value = objForm.message || '';
+    localStorage.removeItem(FORM_KEY);
   }
 }
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  if (email.value === '' || message.value === '') {
-    return alert('Будь-ласка, заповніть всі поля!');
-  }
-  localStorage.removeItem(FORM_KEY);
-  e.currentTarget.reset();
-  objForm = {};
-
-  console.log({ email: email.value, message: message.value });
-});
