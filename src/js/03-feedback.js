@@ -1,11 +1,14 @@
+var throttle = require('lodash/throttle');
+
 const FORM_KEY = 'feedback-form-state';
 let objForm = JSON.parse(localStorage.getItem(FORM_KEY)) || {};
 const form = document.querySelector('.feedback-form');
 const { email, message } = form.elements;
 
-form.addEventListener('input', () => {
-  localStorage.setItem(FORM_KEY, JSON.stringify({ email: email.value, message: message.value }));
-});
+form.addEventListener('input', throttle(time, 500));
+function time() { 
+    localStorage.setItem(FORM_KEY, JSON.stringify({ email: email.value, message: message.value }));
+};
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
